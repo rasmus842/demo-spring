@@ -1,8 +1,13 @@
+import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
+
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.4.5'
 	id 'io.spring.dependency-management' version '1.1.7'
 	id 'io.freefair.lombok' version '8.13.1'
+	id 'org.openapi.generator' version '7.0.1'
+
+	// id 'org.liquibase.gradle' version '2.2.0'
 }
 
 group = 'com.example'
@@ -27,12 +32,12 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
 	// openapi
-	// implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
-	// implementation 'io.swagger.core.v3:swagger-annotations:2.2.15'
-	// implementation 'io.swagger.core.v3:swagger-models:2.2.15'
-	// implementation 'org.openapitools:jackson-databind-nullable:0.2.6'
-	// implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
-	// implementation 'javax.validation:validation-api:2.0.1.Final'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
+	implementation 'io.swagger.core.v3:swagger-annotations:2.2.15'
+	implementation 'io.swagger.core.v3:swagger-models:2.2.15'
+	implementation 'org.openapitools:jackson-databind-nullable:0.2.6'
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+	implementation 'javax.validation:validation-api:2.0.1.Final'
 
 	// db
 	// implementation 'org.liquibase:liquibase-core'
@@ -44,6 +49,61 @@ dependencies {
 	testRuntimeOnly 'com.h2database:h2'
 }
 
+sourceSets.main.java.srcDirs += "$projectDir/src/generated/java"
+
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+tasks.register('generateOpenApi', GenerateTask) {
+	doFirst {
+		delete "$projectDir/openapi-generator"
+	}
+	def generatedPackage = 'com.example.demo.generated'
+
+    generatorName = "spring"
+    inputSpec = "$rootDir/openapi_spec.yaml".toString()
+    outputDir = "$projectDir/openapi-generator".toString()
+	packageName = "$generatedPackage"
+    apiPackage = "${generatedPackage}.api"
+    modelPackage = "${generatedPackage}.model"
+	invokerPackage = "${generatedPackage}.invoker"
+    configOptions = [
+			configPackage: "${generatedPackage}.config",
+
+			// which imports and dependencies to use (// <default>)
+			dateLibrary: "java8", // java8
+			fullJavaUtil: "true", // false
+			openApiNullable: "true", // true
+			performBeanValidation: "true", // false
+			useSpringBoot3: "true", // false - will use jakarta instead of javax
+
+			// using swaggerUI for documentation
+			annotationLibrary: "none", // swagger2
+			documentationProvider: "none", // springdoc
+			hideGenerationTimestamp: "true", // false
+
+			// Pattern of api (// <default>)
+			delegatePattern: "false", // false
+			interfaceOnly: "true", // false
+			skipDefaultInterface: "true", // false
+			requestMappingMode: "none", // none/controller/api_interface
+			unHandledException: "false", // false - useful for @ControllerAdvice
+			useSpringController: "false" // false - @Controller on Api-class
+    ]
+}
+
+tasks.register('copyOpenApi', Copy) {
+	dependsOn 'generateOpenApi'
+	doFirst {
+		delete fileTree("$projectDir/src/generated").matching {
+			include "**/*.java"
+		}
+	}
+	from "$projectDir/openapi-generator/src/main"
+	into "$projectDir/src/generated"
+	include "**/*.java"
+	exclude ".openapi-generator", "**/invoker", "**/config", "**/resources"
+}
+
+compileJava.dependsOn('copyOpenApi')

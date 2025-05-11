@@ -18,6 +18,6 @@ public class TestAppConfig {
     @Bean
     @Primary
     Clock fixedClock() {
-        return Clock.fixed(FIXED_INSTANT, ZoneId.of("UTC"));
+        return Clock.fixed(FIXED_INSTANT, ZoneId.systemDefault());
     }
 }

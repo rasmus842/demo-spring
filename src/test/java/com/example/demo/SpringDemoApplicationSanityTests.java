@@ -58,7 +58,7 @@ class SpringDemoApplicationSanityTests {
 		var account = new Account();
 		account.setName("Rasmus");
 		account.setCreatedAt(FIXED_INSTANT.atZone(ZoneId.systemDefault()));
-		account.setUpdatedAt(FIXED_INSTANT.atZone(ZoneId.systemDefault()).plusHours(1L));
+		account.setModifiedAt(FIXED_INSTANT.atZone(ZoneId.systemDefault()).plusHours(1L));
 		account.setPhoneNr("55512345");
 		account = accountRepo.save(account);
 
