@@ -1,6 +1,9 @@
 package com.example.demo.repo.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,9 +21,12 @@ public class Account {
     private Long id;
 
     @Column(name = "name", nullable = false)
+    @NotBlank
+    @Size(min = 1, max = 255)
     private String name;
 
     @Column(name = "phone_nr", nullable = true)
+    @Pattern(regexp = "^\\+[1-9]\\d{1,14}$")
     private String phoneNr;
 
     @Column(name = "created_at", nullable = false, updatable = false)

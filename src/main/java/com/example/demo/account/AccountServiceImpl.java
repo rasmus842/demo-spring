@@ -3,13 +3,17 @@ package com.example.demo.account;
 import com.example.demo.exceptions.EntityNotFoundException;
 import com.example.demo.repo.dao.AccountRepository;
 import com.example.demo.repo.entity.Account;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.time.Clock;
 import java.time.ZoneId;
 
 @Service
+@Validated
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepo;
@@ -25,8 +29,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Long createNewAccount(Account newAccount) {
-        // TODO validate name and phone number
+    public Long createNewAccount(@NotNull @Valid Account newAccount) {
         var now = clock.instant().atZone(ZoneId.systemDefault());
         newAccount.setCreatedAt(now);
         newAccount.setModifiedAt(now);
@@ -35,8 +38,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void updateAccount(Account account) {
-        // TODO validate name and phone number
+    public void updateAccount(@NotNull @Valid Account account) {
         long id = account.getId();
         var existingAccount = accountRepo.findById(account.getId());
         if (existingAccount.isEmpty()) {

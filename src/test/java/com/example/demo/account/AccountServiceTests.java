@@ -3,6 +3,7 @@ package com.example.demo.account;
 import com.example.demo.TestAppConfig;
 import com.example.demo.exceptions.EntityNotFoundException;
 import com.example.demo.repo.entity.Account;
+import jakarta.validation.ConstraintViolationException;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,8 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.time.Clock;
 import java.time.ZoneId;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = TestAppConfig.class)
@@ -50,6 +50,22 @@ public class AccountServiceTests {
         var newAccount = createMockAccount();
         Long id = accountService.createNewAccount(newAccount);
         assertThat(id).isNotNull();
+    }
+
+    @Test
+    void creatingAccountWithMissingNameThrowsException() {
+        var invalidNameAccount = createMockAccount();
+        invalidNameAccount.setName(null);
+        assertThatThrownBy(() -> accountService.createNewAccount(invalidNameAccount))
+                .isInstanceOf(ConstraintViolationException.class);
+    }
+
+    @Test
+    void creatingAccountWithInvalidPhoneNrThrowsException() {
+        var invalidNameAccount = createMockAccount();
+        invalidNameAccount.setPhoneNr("+37232947298374298347");
+        assertThatThrownBy(() -> accountService.createNewAccount(invalidNameAccount))
+                .isInstanceOf(ConstraintViolationException.class);
     }
 
     @Test
@@ -93,7 +109,7 @@ public class AccountServiceTests {
         var otherAccount = existingAccount.makeCopy();
         otherAccount.setId(id);
         otherAccount.setName("John");
-        otherAccount.setPhoneNr("12345678");
+        otherAccount.setPhoneNr("+37212345678");
 
         accountService.updateAccount(otherAccount);
 
@@ -101,7 +117,7 @@ public class AccountServiceTests {
         assertThat(updatedAccount)
                 .hasFieldOrPropertyWithValue("id", id)
                 .hasFieldOrPropertyWithValue("name", "John")
-                .hasFieldOrPropertyWithValue("phoneNr", "12345678")
+                .hasFieldOrPropertyWithValue("phoneNr", "+37212345678")
                 .hasFieldOrProperty("createdAt")
                 .hasFieldOrProperty("modifiedAt");
     }
@@ -109,7 +125,7 @@ public class AccountServiceTests {
     private Account createMockAccount() {
         var existingAccount = new Account();
         existingAccount.setName("Rasmus");
-        existingAccount.setPhoneNr("55512345");
+        existingAccount.setPhoneNr("+37255512345");
         existingAccount.setCreatedAt(clock.instant().atZone(ZoneId.systemDefault()));
         existingAccount.setModifiedAt(clock.instant().atZone(ZoneId.systemDefault()));
         return existingAccount;
