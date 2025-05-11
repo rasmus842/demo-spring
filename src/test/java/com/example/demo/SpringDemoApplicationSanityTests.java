@@ -1,5 +1,8 @@
 package com.example.demo;
 
+import com.example.demo.account.AccountService;
+import com.example.demo.repo.dao.AccountRepository;
+import com.example.demo.repo.entity.Account;
 import lombok.val;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,11 +28,17 @@ class SpringDemoApplicationSanityTests {
 	@Autowired
 	ManagementController managementController;
 	@Autowired
+	AccountService accountService;
+	@Autowired
+	AccountRepository accountRepo;
+	@Autowired
 	MockMvc mockMvc;
 
 	@Test
 	void contextLoads() {
 		assertThat(managementController).isNotNull();
+		assertThat(accountRepo).isNotNull();
+		assertThat(accountService).isNotNull();
 	}
 
 	@Test
@@ -42,6 +51,23 @@ class SpringDemoApplicationSanityTests {
 				.andExpect(MockMvcResultMatchers.jsonPath("$.timeStamp").value(fixedTime))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.startTime").value(fixedTime))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.upTime").isNotEmpty());
+	}
+
+	@Test
+	void testAccountRepo() {
+		var account = new Account();
+		account.setName("Rasmus");
+		account.setCreatedAt(FIXED_INSTANT.atZone(ZoneId.systemDefault()));
+		account.setUpdatedAt(FIXED_INSTANT.atZone(ZoneId.systemDefault()).plusHours(1L));
+		account.setPhoneNr("55512345");
+		account = accountRepo.save(account);
+
+		assertThat(account.getId()).isNotNull();
+		assertThat(account.getId()).isEqualTo(1L);
+
+		var existingAccount = accountRepo.findById(1L);
+		assertThat(existingAccount).isNotEmpty();
+		assertThat(existingAccount.get().getName()).isEqualTo("Rasmus");
 	}
 
 }
