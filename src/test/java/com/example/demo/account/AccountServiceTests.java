@@ -1,23 +1,18 @@
 package com.example.demo.account;
 
-import com.example.demo.TestAppConfig;
+import com.example.demo.BaseTest;
 import com.example.demo.exceptions.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.Clock;
 import java.time.ZoneId;
 
 import static org.assertj.core.api.Assertions.*;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = TestAppConfig.class)
-public class AccountServiceTests {
+public class AccountServiceTests extends BaseTest {
     @Autowired
     AccountService accountService;
     @Autowired

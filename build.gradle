@@ -51,6 +51,9 @@ dependencies {
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 	implementation 'javax.validation:validation-api:2.0.1.Final'
 
+	// db
+	runtimeOnly 'com.mysql:mysql-connector-j'
+
 	// liquibase
 	liquibaseRuntime 'org.liquibase:liquibase-core:4.24.0'
 	/*
@@ -67,13 +70,13 @@ dependencies {
 	liquibaseRuntime 'org.yaml:snakeyaml:2.4'
 	liquibaseRuntime 'com.mysql:mysql-connector-j'
 
-	// db
-	runtimeOnly 'com.mysql:mysql-connector-j'
-
 	// tests
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	testRuntimeOnly 'com.h2database:h2'
+
+	testImplementation 'org.testcontainers:junit-jupiter:1.21.0'
+	testImplementation 'org.testcontainers:mysql:1.21.0'
 }
 
 sourceSets.main.java.srcDirs += "$projectDir/src/generated/java"
@@ -81,6 +84,13 @@ sourceSets.main.java.srcDirs += "$projectDir/src/generated/java"
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+/*
+tasks.register('mySqlTest', Test) {
+	useJUnitPlatform()
+	systemProperty("spring.profiles.active", "mySqlTest")
+}
+*/
 
 liquibase {
 	activities {
