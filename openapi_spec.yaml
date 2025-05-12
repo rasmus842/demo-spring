@@ -3,9 +3,6 @@ info:
   title: Account Management API
   description: API for managing Account entities
   version: 1.0.0
-servers:
-  - url: http://localhost:8080
-    description: Local development server
 externalDocs:
   url: https://swagger.io/specification/
   description: Find more information about OAS3.0 standard.

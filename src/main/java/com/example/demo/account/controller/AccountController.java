@@ -6,6 +6,7 @@ import com.example.demo.generated.model.AccountDTO;
 import com.example.demo.generated.model.AccountRequest;
 import com.example.demo.account.Account;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,8 @@ public class AccountController implements AccountsApi {
     public ResponseEntity<Long> createAccount(@RequestBody @Valid AccountRequest accountRequest) {
         var newAccount = mapRequestToAccount(accountRequest);
         Long generatedId = accountService.createNewAccount(newAccount);
-        return ResponseEntity.ok(generatedId);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(generatedId);
     }
 
     @Override
