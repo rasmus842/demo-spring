@@ -1,8 +1,10 @@
 package com.example.demo.exceptions;
 
+import com.example.demo.account.AccountController;
 import com.example.demo.generated.model.ErrorMessage;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +14,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.stream.Collectors;
 
-@RestControllerAdvice
-public class GlobalExceptionHandler {
+@RestControllerAdvice(basePackageClasses = AccountController.class)
+@Slf4j
+public class AccountControllerAdvice {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ErrorMessage> handleNotFound(EntityNotFoundException e) {
@@ -52,6 +55,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorMessage> handleGenericError(Exception e) {
+        log.error("Server error: {}", e.getMessage(), e);
         val errorMessage = new ErrorMessage();
         errorMessage.setTitle("Internal Server Error");
         errorMessage.setDetail("Unexpected internal server error.");
@@ -60,6 +64,7 @@ public class GlobalExceptionHandler {
     }
 
     private String mapViolationToMessage(ConstraintViolation<?> violation) {
-        return String.format("Field %s value %s is invalid: %s", violation.getPropertyPath());
+        return String.format("%s value %s is invalid: %s",
+                violation.getPropertyPath(), violation.getInvalidValue(), violation.getMessage());
     }
 }

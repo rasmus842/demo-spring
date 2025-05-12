@@ -111,7 +111,7 @@ tasks.register('generateOpenApi', GenerateTask) {
 			// which imports and dependencies to use (// <default>)
 			dateLibrary: "java8", // java8
 			fullJavaUtil: "true", // false
-			openApiNullable: "true", // true
+			openApiNullable: "false", // true
 			performBeanValidation: "true", // false
 			useSpringBoot3: "true", // false - will use jakarta instead of javax
 

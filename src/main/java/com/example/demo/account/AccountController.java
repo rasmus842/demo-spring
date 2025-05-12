@@ -5,7 +5,6 @@ import com.example.demo.generated.model.AccountDTO;
 import com.example.demo.generated.model.AccountRequest;
 import com.example.demo.repo.entity.Account;
 import lombok.RequiredArgsConstructor;
-import org.openapitools.jackson.nullable.JsonNullable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,7 +52,7 @@ public class AccountController implements AccountsApi {
     private Account mapRequestToAccount(AccountRequest request) {
         var account = new Account();
         account.setName(request.getName());
-        account.setPhoneNr(request.getPhoneNr().orElse(null));
+        account.setPhoneNr(request.getPhoneNr());
         return account;
     }
 
@@ -61,7 +60,7 @@ public class AccountController implements AccountsApi {
         var dto = new AccountDTO();
         dto.setId(account.getId());
         dto.setName(account.getName());
-        dto.setPhoneNr(JsonNullable.of(account.getPhoneNr()));
+        dto.setPhoneNr(account.getPhoneNr());
         dto.setCreatedAt(account.getCreatedAt().toOffsetDateTime());
         dto.setUpdatedAt(account.getModifiedAt().toOffsetDateTime());
         return dto;
