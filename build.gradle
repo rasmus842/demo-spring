@@ -9,6 +9,8 @@ plugins {
 	id 'org.liquibase.gradle' version '2.2.0'
 }
 
+def liquibaseChangelog = 'db/changelog.yaml'
+
 ext {
 	env = project.getProperties().getOrDefault('env', 'dev')
 	if (env != 'dev'
@@ -75,8 +77,10 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	testRuntimeOnly 'com.h2database:h2'
 
+	// running tests using MySQL instead of h2
 	testImplementation 'org.testcontainers:junit-jupiter:1.21.0'
 	testImplementation 'org.testcontainers:mysql:1.21.0'
+	testImplementation 'org.liquibase:liquibase-core:4.24.0'
 }
 
 sourceSets.main.java.srcDirs += "$projectDir/src/generated/java"
@@ -85,17 +89,16 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-/*
 tasks.register('mySqlTest', Test) {
 	useJUnitPlatform()
 	systemProperty("spring.profiles.active", "mySqlTest")
+	systemProperty("spring.liquibase.changelog", "file:db/changelog.yaml")
 }
-*/
 
 liquibase {
 	activities {
 		main {
-			changelogFile "db/changelog.yaml"
+			changelogFile liquibaseChangelog
 			url dbUrl
 			username dbUser
 			password dbPassword
@@ -157,7 +160,5 @@ tasks.register('copyOpenApi', Copy) {
 compileJava.dependsOn('copyOpenApi')
 
 bootRun {
-	if (env == 'dev') {
-		args = ['--spring.profiles.active=dev']
-	}
+	args = ["--spring.profiles.active=${env}"]
 }
