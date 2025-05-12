@@ -85,14 +85,13 @@ dependencies {
 
 sourceSets.main.java.srcDirs += "$projectDir/src/generated/java"
 
-tasks.named('test') {
+tasks.withType(Test).configureEach {
 	useJUnitPlatform()
+	systemProperty("spring.liquibase.changelog", "file:db/changelog.yaml")
 }
 
 tasks.register('mySqlTest', Test) {
-	useJUnitPlatform()
 	systemProperty("spring.profiles.active", "mySqlTest")
-	systemProperty("spring.liquibase.changelog", "file:db/changelog.yaml")
 }
 
 liquibase {
