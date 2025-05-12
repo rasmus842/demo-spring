@@ -10,6 +10,10 @@ plugins {
 	// id 'org.liquibase.gradle' version '2.2.0'
 }
 
+ext {
+	env = project.hasProperty('env') ? project.env : 'dev'
+}
+
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 
@@ -41,7 +45,7 @@ dependencies {
 
 	// db
 	// implementation 'org.liquibase:liquibase-core'
-	// runtimeOnly 'com.mysql:mysql-connector-j'
+	runtimeOnly 'com.mysql:mysql-connector-j'
 
 	// tests
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -107,3 +111,9 @@ tasks.register('copyOpenApi', Copy) {
 }
 
 compileJava.dependsOn('copyOpenApi')
+
+bootRun {
+	if (project.env == 'dev') {
+		args = ['--spring.profiles.active=dev']
+	}
+}
