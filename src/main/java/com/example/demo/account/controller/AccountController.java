@@ -1,9 +1,10 @@
-package com.example.demo.account;
+package com.example.demo.account.controller;
 
+import com.example.demo.account.AccountService;
 import com.example.demo.generated.api.AccountsApi;
 import com.example.demo.generated.model.AccountDTO;
 import com.example.demo.generated.model.AccountRequest;
-import com.example.demo.repo.entity.Account;
+import com.example.demo.account.Account;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

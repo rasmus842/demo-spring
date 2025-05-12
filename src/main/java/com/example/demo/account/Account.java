@@ -1,4 +1,4 @@
-package com.example.demo.repo.entity;
+package com.example.demo.account;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

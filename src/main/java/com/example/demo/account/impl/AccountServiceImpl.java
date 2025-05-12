@@ -1,8 +1,9 @@
-package com.example.demo.account;
+package com.example.demo.account.impl;
 
+import com.example.demo.account.AccountService;
 import com.example.demo.exceptions.EntityNotFoundException;
-import com.example.demo.repo.dao.AccountRepository;
-import com.example.demo.repo.entity.Account;
+import com.example.demo.account.repo.AccountRepository;
+import com.example.demo.account.Account;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;

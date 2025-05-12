@@ -1,6 +1,6 @@
-package com.example.demo.repo.dao;
+package com.example.demo.account.repo;
 
-import com.example.demo.repo.entity.Account;
+import com.example.demo.account.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

@@ -1,6 +1,6 @@
-package com.example.demo.exceptions;
+package com.example.demo.account.controller;
 
-import com.example.demo.account.AccountController;
+import com.example.demo.exceptions.EntityNotFoundException;
 import com.example.demo.generated.model.ErrorMessage;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;

@@ -1,7 +1,5 @@
 package com.example.demo.account;
 
-import com.example.demo.repo.entity.Account;
-
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 

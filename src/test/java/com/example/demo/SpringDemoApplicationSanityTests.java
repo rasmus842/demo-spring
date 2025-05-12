@@ -1,8 +1,8 @@
 package com.example.demo;
 
 import com.example.demo.account.AccountService;
-import com.example.demo.repo.dao.AccountRepository;
-import com.example.demo.repo.entity.Account;
+import com.example.demo.account.repo.AccountRepository;
+import com.example.demo.account.Account;
 import lombok.val;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

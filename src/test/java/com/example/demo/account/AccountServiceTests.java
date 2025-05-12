@@ -2,7 +2,6 @@ package com.example.demo.account;
 
 import com.example.demo.TestAppConfig;
 import com.example.demo.exceptions.EntityNotFoundException;
-import com.example.demo.repo.entity.Account;
 import jakarta.validation.ConstraintViolationException;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
