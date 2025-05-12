@@ -158,6 +158,10 @@ tasks.register('copyOpenApi', Copy) {
 
 compileJava.dependsOn('copyOpenApi')
 
+clean {
+	delete 'src/generated'
+}
+
 bootRun {
 	args = ["--spring.profiles.active=${env}"]
 }
