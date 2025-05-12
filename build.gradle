@@ -54,6 +54,7 @@ dependencies {
 	// liquibase
 	liquibaseRuntime 'org.liquibase:liquibase-core:4.24.0'
 	/*
+	TODO: Try to make xml changelogs work?
 	did not manage to make xml or groovy dsl work, using yaml instead
 	liquibaseRuntime('org.liquibase:liquibase-groovy-dsl:4.0.0') {
 		exclude group: "org.codehaus.groovy", module: "groovy"
@@ -63,7 +64,7 @@ dependencies {
 	liquibaseRuntime 'org.apache.groovy:groovy-sql:4.0.5'
 	*/
 	liquibaseRuntime 'info.picocli:picocli:4.7.5'
-	liquibaseRuntime 'org.yaml:snakeyaml:1.33'
+	liquibaseRuntime 'org.yaml:snakeyaml:2.4'
 	liquibaseRuntime 'com.mysql:mysql-connector-j'
 
 	// db
