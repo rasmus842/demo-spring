@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.management;
 
 import lombok.val;
 import org.springframework.http.ResponseEntity;
