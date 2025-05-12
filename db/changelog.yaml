@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - include:
+      file: changesets/2025-05-12-add-account-table.yaml
+      relativeToChangelogFile: true

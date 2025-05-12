@@ -6,12 +6,20 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.7'
 	id 'io.freefair.lombok' version '8.13.1'
 	id 'org.openapi.generator' version '7.0.1'
-
-	// id 'org.liquibase.gradle' version '2.2.0'
+	id 'org.liquibase.gradle' version '2.2.0'
 }
 
 ext {
-	env = project.hasProperty('env') ? project.env : 'dev'
+	env = project.getProperties().getOrDefault('env', 'dev')
+	if (env != 'dev'
+			&& (!project.hasProperty('dbUrl')
+				|| !project.hasProperty('dbUser')
+				|| !project.hasProperty('dbPassword'))) {
+		throw new GradleException('If not in dev environment dbUrl, dbUser, and dbPassword properties must be set!')
+	}
+	dbUrl = project.getProperties().getOrDefault('dbUrl', 'jdbc:mysql://localhost:3306/spring-demo')
+	dbUser = project.getProperties().getOrDefault('dbUser', 'spring-demo')
+	dbPassword = project.getProperties().getOrDefault('dbPassword', 'spring-demo')
 }
 
 group = 'com.example'
@@ -43,8 +51,22 @@ dependencies {
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 	implementation 'javax.validation:validation-api:2.0.1.Final'
 
+	// liquibase
+	liquibaseRuntime 'org.liquibase:liquibase-core:4.24.0'
+	/*
+	did not manage to make xml or groovy dsl work, using yaml instead
+	liquibaseRuntime('org.liquibase:liquibase-groovy-dsl:4.0.0') {
+		exclude group: "org.codehaus.groovy", module: "groovy"
+		exclude group: "org.codehaus.groovy", module: "groovy-sql"
+	}
+	liquibaseRuntime 'org.apache.groovy:groovy:4.0.5'
+	liquibaseRuntime 'org.apache.groovy:groovy-sql:4.0.5'
+	*/
+	liquibaseRuntime 'info.picocli:picocli:4.7.5'
+	liquibaseRuntime 'org.yaml:snakeyaml:1.33'
+	liquibaseRuntime 'com.mysql:mysql-connector-j'
+
 	// db
-	// implementation 'org.liquibase:liquibase-core'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
 	// tests
@@ -57,6 +79,17 @@ sourceSets.main.java.srcDirs += "$projectDir/src/generated/java"
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+liquibase {
+	activities {
+		main {
+			changelogFile "db/changelog.yaml"
+			url dbUrl
+			username dbUser
+			password dbPassword
+		}
+	}
 }
 
 tasks.register('generateOpenApi', GenerateTask) {
@@ -113,7 +146,7 @@ tasks.register('copyOpenApi', Copy) {
 compileJava.dependsOn('copyOpenApi')
 
 bootRun {
-	if (project.env == 'dev') {
+	if (env == 'dev') {
 		args = ['--spring.profiles.active=dev']
 	}
 }

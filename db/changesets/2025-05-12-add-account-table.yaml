@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: add_account_table
+      author: rasmuszalite@gmail.com
+      changes:
+        - createTable:
+            tableName: account
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: phone_nr
+                  type: VARCHAR(16)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
