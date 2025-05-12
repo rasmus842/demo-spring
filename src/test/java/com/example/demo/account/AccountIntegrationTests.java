@@ -41,7 +41,7 @@ public class AccountIntegrationTests extends BaseTest {
     @Test
     void doesNotGetUnknownAccount() {
         ResponseEntity<ErrorMessage> resp =
-                restTemplate.getForEntity(baseUrl + "/account/" + unknownId, ErrorMessage.class);
+                restTemplate.getForEntity(baseUrl + "/accounts/" + unknownId, ErrorMessage.class);
         assertThat(resp.getStatusCode().value()).isEqualTo(404);
     }
 
@@ -78,7 +78,7 @@ public class AccountIntegrationTests extends BaseTest {
             restTemplate.delete(baseUrl + "/accounts/" + accountId);
 
             ResponseEntity<ErrorMessage> resp =
-                    restTemplate.getForEntity(baseUrl + "/account/" + accountId, ErrorMessage.class);
+                    restTemplate.getForEntity(baseUrl + "/accounts/" + accountId, ErrorMessage.class);
             assertThat(resp.getStatusCode().value()).isEqualTo(404);
         }
 
@@ -102,7 +102,7 @@ public class AccountIntegrationTests extends BaseTest {
 
     private AccountDTO getAccount(Long id) {
         ResponseEntity<AccountDTO> resp =
-                restTemplate.getForEntity(baseUrl + "/account/" + id, AccountDTO.class);
+                restTemplate.getForEntity(baseUrl + "/accounts/" + id, AccountDTO.class);
         assertThat(resp.getStatusCode().value()).isEqualTo(200);
         return resp.getBody();
     }

@@ -34,7 +34,7 @@ public class AccountController implements AccountsApi {
     }
 
     @Override
-    @GetMapping("/account/{id}")
+    @GetMapping("/accounts/{id}")
     public ResponseEntity<AccountDTO> getAccountById(@PathVariable("id") Long id) {
         var account = accountService.getAccountById(id);
         return ResponseEntity.ok(mapAccountToResponse(account));
